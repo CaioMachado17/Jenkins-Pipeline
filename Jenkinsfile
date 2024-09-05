@@ -14,6 +14,20 @@ pipeline {
                 echo "Running unit tests to verify code functionality and integration tests to ensure all components work together."
                 echo "Tools: JUnit (for unit tests), Selenium (for integration tests)"
             }
+            post {
+                success {
+                    emailext subject: "Build Successful - Unit and Integration Tests",
+                             body: "The unit and integration tests passed successfully.",
+                             to: 'caiomachado17.10@gmail.com',
+                             attachLog: true
+                }
+                failure {
+                    emailext subject: "Build Failed - Unit and Integration Tests",
+                             body: "The unit and integration tests failed.",
+                             to: 'caiomachado17.10@gmail.com',
+                             attachLog: true
+                }
+            }
         }
 
         stage('Code Analysis') {
@@ -26,7 +40,21 @@ pipeline {
         stage('Security Scan') {
             steps {
                 echo "Performing a security scan to identify potential vulnerabilities in the code and dependencies."
-                echo "Tool: OWASP Dependency-Check"
+                echo "Tool: OWASP Dependency-Check"   
+            }
+                post {
+                    success {
+                        emailext subject: "Build Successful - Security Scan",
+                                 body: "The security scan passed successfully.",
+                                 to: 'caiomachado17.10@gmail.com',
+                                 attachLog: true
+                }
+                    failure {
+                        emailext subject: "Build Failed - Security Scan",
+                                 body: "The security scan failed.",
+                                 to: 'caiomachado17.10@gmail.com',
+                                 attachLog: true
+                }
             }
         }
 
